@@ -143,12 +143,37 @@ rlvr_tool_training/
 │   ├── training_config.py   # Model & hyperparameter configuration
 │   └── tool_definitions.py  # Tool schema definitions
 ├── core/
-│   ├── trajectories.py      # Trajectory & reward data structures
-│   ├── rewards.py           # Verifiable reward functions
+│   ├── trajectories.py      # Single-step trajectory & reward data
+│   ├── workflow.py          # Multi-step workflow trajectories
+│   ├── verifiers.py         # Terminal verifiers (pytest, artifact, etc.)
+│   ├── terminal_rewards.py  # Sequence-level reward aggregation
+│   ├── export.py            # JSONL export and statistics
+│   ├── rollout.py           # Rollout/training integration
+│   ├── rewards.py           # Per-step reward functions
 │   └── trainer.py           # OpenPipe + W&B training integration
 └── examples/
     └── example_training.py  # Complete usage example
 ```
+
+## Workflow Trajectories (Multi-Step)
+
+For complete tool-use workflows with terminal rewards:
+
+```python
+from rlvr_tool_training.core import RolloutManager, RolloutConfig
+
+manager = RolloutManager(RolloutConfig(output_dir="./trajectories"))
+
+with manager.start_rollout("Fix the bug in main.py") as rollout:
+    rollout.record_tool_call("read_file", {"path": "main.py"}, result="...")
+    rollout.record_tool_call("edit_file", {"path": "main.py", "content": "..."})
+    rollout.record_tool_call("run_tests", {}, stdout="3 passed", exit_code=0)
+    rollout.set_final_answer("Fixed the null pointer exception")
+
+print(f"Terminal score: {manager.last_result.final_score}")
+```
+
+See [docs/TRAJECTORY_RECORDING.md](docs/TRAJECTORY_RECORDING.md) for full documentation.
 
 ## Verifiable Rewards
 
