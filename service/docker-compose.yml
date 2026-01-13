@@ -1,0 +1,24 @@
+# Docker Compose for Tool Selection Service
+#
+# Usage:
+#   docker-compose up --build
+#
+# The service will be available at http://localhost:8000
+
+services:
+  tool-selector:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Your OpenPipe API key (get from https://app.openpipe.ai)
+      - OPENPIPE_API_KEY=${OPENPIPE_API_KEY}
+      # The model slug from your RLVR training
+      - OPENPIPE_MODEL_SLUG=${OPENPIPE_MODEL_SLUG:-tool-selector-llama-8b-v1}
+      - ENVIRONMENT=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
