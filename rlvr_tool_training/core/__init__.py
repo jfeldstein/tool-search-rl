@@ -55,6 +55,20 @@ from .rollout import (
     create_rollout_manager,
 )
 
+# Tool selection verification (core of this POC)
+from .tool_selection import (
+    ToolSelectionQuery,
+    ToolSelectionResponse,
+    SelectionVerdict,
+    ToolSelectionVerifier,
+    GroundTruthVerifier,
+    IntentMatchingVerifier,
+    RuleBasedVerifier,
+    CompositeSelectionVerifier,
+    ToolSelectionExample,
+    create_selection_example,
+)
+
 __all__ = [
     # Original
     "Trajectory",
@@ -100,4 +114,15 @@ __all__ = [
     "RolloutConfig",
     "RolloutContext",
     "create_rollout_manager",
+    # Tool selection (core POC)
+    "ToolSelectionQuery",
+    "ToolSelectionResponse",
+    "SelectionVerdict",
+    "ToolSelectionVerifier",
+    "GroundTruthVerifier",
+    "IntentMatchingVerifier",
+    "RuleBasedVerifier",
+    "CompositeSelectionVerifier",
+    "ToolSelectionExample",
+    "create_selection_example",
 ]
